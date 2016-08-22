@@ -12,7 +12,18 @@ extends Node
 var connecting = false
 var connected = false
 var streamPeer = StreamPeerTCP.new()
-var buffer = RawArray([])
+
+var hasEmittedConnectionEvent = false
+var hasEmittedDisconnectionEvent = true
+
+const CONNECTED = "connected"
+const DISCONNECTED = "disconnected"
+const MESSAGE_RECEIVED = "message_received"
+
+func _init():
+	add_user_signal(CONNECTED)
+	add_user_signal(DISCONNECTED)
+	add_user_signal(MESSAGE_RECEIVED)
 
 func _ready():
 	set_process(true)
@@ -22,6 +33,7 @@ func _process(delta):
 	if connected:
 		if streamPeer.get_available_bytes() > 0:
 			var msg = _get_waiting_message()
+			emit_signal(MESSAGE_RECEIVED, msg)
 		else:
 			print("Done receiving msgs")
 		# TODO: parse packets
@@ -54,8 +66,6 @@ func send(data):
 	print("Sent data: " + data.to_json())
 
 func _get_waiting_message():
-	var buffer = RawArray([])
-	var expectedLength = 0
 	# wait for a valid header...
 	var data = streamPeer.get_data(3)
 	var header = RawArray(data[1]).get_string_from_ascii()
@@ -63,14 +73,18 @@ func _get_waiting_message():
 		# loop until collected entire do-dawdle
 		while true:
 			if streamPeer.get_available_bytes() > 4:
-				expectedLength = streamPeer.get_u32()
+				var expectedLength = streamPeer.get_u32()
 				var data = streamPeer.get_data(expectedLength)
-				return RawArray(data[1]).get_string_from_utf8()	
+				return RawArray(data[1]).get_string_from_utf8()
 	
 func _check_connection():
 	if streamPeer.get_status() == StreamPeerTCP.STATUS_CONNECTED:
 		connecting = false
 		connected = true
+		if !hasEmittedConnectionEvent:
+			hasEmittedConnectionEvent = true
+			hasEmittedDisconnectionEvent = false
+			emit_signal(CONNECTED)
 	if streamPeer.get_status() == StreamPeerTCP.STATUS_CONNECTING:
 		connected = false
 		connecting = true
@@ -83,4 +97,7 @@ func _check_connection():
 		connected = false
 		connecting = false
 		# print("Status: Disconnected")
-	
+		if !hasEmittedDisconnectionEvent:
+			hasEmittedDisconnectionEvent = true
+			hasEmittedConnectionEvent = false
+			emit_signal(DISCONNECTED)
