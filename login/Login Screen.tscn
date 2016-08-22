@@ -5,7 +5,7 @@
 
 [sub_resource type="GDScript" id=1]
 
-script/source = "extends Button\n\nvar explosion = preload(\"res://Particles2D.tscn\")\n\nfunc _input_event(ev):\n\tif (ev.type == InputEvent.MOUSE_BUTTON && ev.pressed):\t\t\n\t\tvar particles = explosion.instance()\n\t\tvar parent = get_node(\"../../../Node2D\")\n\t\tparent.add_child(particles)\n\t\tparticles.set_pos(get_viewport().get_mouse_pos())\n\t\tparticles.set_emitting(true)\n\t\t\n\t\tvar global = get_node(\"/root/global\")\n\t\tglobal.connectToServer()\n\t\t"
+script/source = "extends Button\n\nvar explosion = preload(\"res://Particles2D.tscn\")\n\nfunc _input_event(ev):\n\tif (ev.type == InputEvent.MOUSE_BUTTON && ev.pressed):\t\t\n\t\tvar particles = explosion.instance()\n\t\tvar parent = get_node(\"../../../Node2D\")\n\t\tparent.add_child(particles)\n\t\tparticles.set_pos(get_viewport().get_mouse_pos())\n\t\tparticles.set_emitting(true)\n\t\t\n\t\t# TODO: this is so risky\n\t\tget_tree().change_scene(\"res://screens/play_scene.tscn\")\n\t\t\n\t\tvar global = get_node(\"/root/global\")\n\t\tglobal.connectToServer()\n\t\t"
 
 [node name="Node2D" type="Node2D"]
 

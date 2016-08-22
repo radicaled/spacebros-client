@@ -1,0 +1,18 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://assets/icons/mob/human.png" type="Texture" id=1]
+
+[node name="Humanoid" type="Node2D"]
+
+transform/pos = Vector2( 30.6933, 17.1883 )
+
+[node name="Sprite" type="Sprite" parent="."]
+
+transform/pos = Vector2( 414.966, 264.905 )
+transform/scale = Vector2( 1.24456, 1.03246 )
+texture = ExtResource( 1 )
+vframes = 16
+hframes = 16
+frame = 2
+
+
