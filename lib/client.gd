@@ -12,7 +12,7 @@ extends Node
 var connecting = false
 var connected = false
 var streamPeer = StreamPeerTCP.new()
-var buffer = []
+var buffer = RawArray([])
 
 func _ready():
 	set_process(true)
@@ -21,7 +21,9 @@ func _process(delta):
 	_check_connection()
 	if connected:
 		if streamPeer.get_available_bytes() > 0:
-			var msg = get_waiting_message()
+			var msg = _get_waiting_message()
+		else:
+			print("Done receiving msgs")
 		# TODO: parse packets
 		# TODO: trigger callbacks
 		# TODO: get bare bones visualization working. FREE AT LAST, FREE AT LAST.
@@ -34,28 +36,37 @@ func connectToGameServer(host, port):
 	
 	if streamPeer.get_status() == StreamPeerTCP.STATUS_CONNECTED:
 		print("Connection established.")
-		# Execute evil wizardry here
-		send({ "HELLO": "WORLD" }.to_json())
-		# Ensuring that it trims correctly
-		send({ "TAKE": "TWO" }.to_json())
-		print("sending data...?")
+		# Dummy login
+		send({ "@class" : "spacebros.networking.Messages$Login", "data": "" })
 	
 func send(data):
 	# Format:
 	# "MSG" - ASCII (77, 83, 71)
 	# Length: UInt, Big Endian
 	# Data: utf-8 string
-	var rawArray = data.to_utf8()
+	var rawArray = data.to_json().to_utf8()
 	streamPeer.put_8(77) # M
 	streamPeer.put_8(83) # S
 	streamPeer.put_8(71) # G
 	streamPeer.put_u32(rawArray.size()) # Length of Message in bytes
 	streamPeer.put_partial_data(rawArray) # Actual data	
 	
-	print("Sent data: " + data)
+	print("Sent data: " + data.to_json())
 
-func _get_waiting_message
-
+func _get_waiting_message():
+	var buffer = RawArray([])
+	var expectedLength = 0
+	# wait for a valid header...
+	var data = streamPeer.get_data(3)
+	var header = RawArray(data[1]).get_string_from_ascii()
+	if header == 'MSG':
+		# loop until collected entire do-dawdle
+		while true:
+			if streamPeer.get_available_bytes() > 4:
+				expectedLength = streamPeer.get_u32()
+				var data = streamPeer.get_data(expectedLength)
+				return RawArray(data[1]).get_string_from_utf8()	
+	
 func _check_connection():
 	if streamPeer.get_status() == StreamPeerTCP.STATUS_CONNECTED:
 		connecting = false
