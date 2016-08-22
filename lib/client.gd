@@ -34,11 +34,6 @@ func _process(delta):
 		if streamPeer.get_available_bytes() > 0:
 			var msg = _get_waiting_message()
 			emit_signal(MESSAGE_RECEIVED, msg)
-		else:
-			print("Done receiving msgs")
-		# TODO: parse packets
-		# TODO: trigger callbacks
-		# TODO: get bare bones visualization working. FREE AT LAST, FREE AT LAST.
 	
 
 func connectToGameServer(host, port):
