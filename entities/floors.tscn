@@ -2,11 +2,10 @@
 
 [ext_resource path="res://assets/icons/turf/floors.png" type="Texture" id=1]
 
-[node name="Node2D" type="Node2D"]
+[node name="Floor" type="Node2D"]
 
 [node name="Sprite" type="Sprite" parent="."]
 
-transform/pos = Vector2( 532.894, 307 )
 texture = ExtResource( 1 )
 vframes = 27
 hframes = 28

@@ -2,24 +2,40 @@
 
 [ext_resource path="res://screens/play_scene.gd" type="Script" id=1]
 
-[node name="Node2D" type="Node2D"]
+[node name="PlayScreen" type="Node2D"]
 
-transform/pos = Vector2( 393.193, 250.927 )
-transform/scale = Vector2( 1.3908, 0.954871 )
 script/script = ExtResource( 1 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+
+anchor_mode = 1
+rotating = false
+current = true
+zoom = Vector2( 1, 1 )
+limit/left = -10000000
+limit/top = -10000000
+limit/right = 10000000
+limit/bottom = 10000000
+drag_margin/h_enabled = true
+drag_margin/v_enabled = true
+smoothing/enable = false
+smoothing/speed = 5.0
+drag_margin/left = 0.2
+drag_margin/top = 0.2
+drag_margin/right = 0.2
+drag_margin/bottom = 0.2
 
 [node name="Label" type="Label" parent="."]
 
-rect/scale = Vector2( 5, 5 )
 focus/ignore_mouse = true
 focus/stop_mouse = true
 size_flags/horizontal = 2
 size_flags/vertical = 0
-margin/left = -184.0
-margin/top = -9.0
-margin/right = -89.0
-margin/bottom = 6.0
-text = "HELLO WORLD"
+margin/left = -514.0
+margin/top = -300.0
+margin/right = 120.0
+margin/bottom = -213.0
+text = "GAME TURN ON"
 percent_visible = 1.0
 lines_skipped = 0
 max_lines_visible = -1

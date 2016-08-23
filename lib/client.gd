@@ -15,6 +15,7 @@ var streamPeer = StreamPeerTCP.new()
 
 var hasEmittedConnectionEvent = false
 var hasEmittedDisconnectionEvent = true
+var thread = Thread.new()
 
 const CONNECTED = "connected"
 const DISCONNECTED = "disconnected"
@@ -27,6 +28,7 @@ func _init():
 
 func _ready():
 	set_process(true)
+	# thread.start(self,'_run', self)
 
 func _process(delta):
 	_check_connection()
