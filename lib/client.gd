@@ -43,8 +43,6 @@ func connectToGameServer(host, port):
 	
 	if streamPeer.get_status() == StreamPeerTCP.STATUS_CONNECTED:
 		print("Connection established.")
-		# Dummy login
-		send({ "@class" : "spacebros.networking.Messages$Login", "data": "" })
 	
 func send(data):
 	# Format:
