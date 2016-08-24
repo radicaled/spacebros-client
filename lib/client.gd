@@ -30,7 +30,7 @@ func _init():
 
 func _ready():
 	if use_threads:
-		if OK != thread.start(self, '_run_in_thread', self):
+		if OK != thread.start(self, '_run_in_thread', null):
 			print("client.gd: FAILED TO START THREAD")
 	else:
 		set_process(true)
