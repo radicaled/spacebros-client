@@ -17,7 +17,7 @@ var hasEmittedConnectionEvent = false
 var hasEmittedDisconnectionEvent = true
 var thread = Thread.new()
 var mutex = Mutex.new()
-var use_threads = false
+var use_threads = true
 
 const CONNECTED = "connected"
 const DISCONNECTED = "disconnected"
@@ -41,9 +41,9 @@ func _process(delta):
 func _run():
 	_check_connection()
 	if connected:
-		while streamPeer.get_available_bytes() > 0:
+		if streamPeer.get_available_bytes() > 0:
 			var msg = _get_waiting_message()
-			emit_signal(MESSAGE_RECEIVED, msg)
+			call_deferred("emit_signal", MESSAGE_RECEIVED, msg)
 
 func _run_in_thread(user_data):
 	while true:
