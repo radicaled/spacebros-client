@@ -16,6 +16,8 @@ var streamPeer = StreamPeerTCP.new()
 var hasEmittedConnectionEvent = false
 var hasEmittedDisconnectionEvent = true
 var thread = Thread.new()
+var mutex = Mutex.new()
+var use_threads = false
 
 const CONNECTED = "connected"
 const DISCONNECTED = "disconnected"
@@ -27,16 +29,28 @@ func _init():
 	add_user_signal(MESSAGE_RECEIVED)
 
 func _ready():
-	set_process(true)
-	# thread.start(self,'_run', self)
+	if use_threads:
+		if OK != thread.start(self, '_run_in_thread', self):
+			print("client.gd: FAILED TO START THREAD")
+	else:
+		set_process(true)
 
 func _process(delta):
+	_run()
+
+func _threaded_emit(user_data):
+	emit_signal(user_data.signal_type, user_data.msg)
+
+func _run():
 	_check_connection()
 	if connected:
 		if streamPeer.get_available_bytes() > 0:
 			var msg = _get_waiting_message()
 			emit_signal(MESSAGE_RECEIVED, msg)
-	
+
+func _run_in_thread(user_data):
+	while true:
+		_run()
 
 func connectToGameServer(host, port):
 	streamPeer.set_big_endian(true)
@@ -47,6 +61,7 @@ func connectToGameServer(host, port):
 		print("Connection established.")
 	
 func send(data):
+	mutex.lock()
 	# Format:
 	# "MSG" - ASCII (77, 83, 71)
 	# Length: UInt, Big Endian
@@ -58,6 +73,7 @@ func send(data):
 	streamPeer.put_u32(rawArray.size()) # Length of Message in bytes
 	streamPeer.put_partial_data(rawArray) # Actual data	
 	
+	mutex.unlock()
 	print("Sent data: " + data.to_json())
 
 func _get_waiting_message():
