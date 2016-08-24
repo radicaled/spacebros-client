@@ -38,13 +38,10 @@ func _ready():
 func _process(delta):
 	_run()
 
-func _threaded_emit(user_data):
-	emit_signal(user_data.signal_type, user_data.msg)
-
 func _run():
 	_check_connection()
 	if connected:
-		if streamPeer.get_available_bytes() > 0:
+		while streamPeer.get_available_bytes() > 0:
 			var msg = _get_waiting_message()
 			emit_signal(MESSAGE_RECEIVED, msg)
 
@@ -56,9 +53,6 @@ func connectToGameServer(host, port):
 	streamPeer.set_big_endian(true)
 	streamPeer.connect(host, port)
 	connecting = true
-	
-	if streamPeer.get_status() == StreamPeerTCP.STATUS_CONNECTED:
-		print("Connection established.")
 	
 func send(data):
 	mutex.lock()
