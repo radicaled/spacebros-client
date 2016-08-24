@@ -15,4 +15,5 @@ func add_entity(entityId, node):
 func remove_entity(entityId, node):
 	entities.erase(entityId)
 
-
+func size():
+	return entities.size()
