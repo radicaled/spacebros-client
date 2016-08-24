@@ -35,20 +35,13 @@ func _on_delete_entity(msg):
 func _on_set_camera(msg):
 	var camera = get_node("Camera2D")
 	camera.set_pos(Vector2(msg.position.x * TILE_WIDTH, msg.position.y * TILE_HEIGHT))
-	var pos = camera.get_pos()
-	print("Updated camera")
-	print(pos)
-	print("Original Position")
-	print(Vector2(msg.position.x, msg.position.y))
-
 
 func create_entity_node(msg):
-	var resource = entity_scene_mapper.map(msg.type)
-	if !resource:
+	var scene = entity_scene_mapper.map(msg.type)
+	if !scene:
 		return
-	var scene = load(resource)
 	var node = scene.instance()
-	var sprite = node.get_node("Sprite")	
+	var sprite = node.get_node("Sprite")
 	node.set_pos(Vector2(msg.position.x * TILE_WIDTH, msg.position.y * TILE_HEIGHT))
 	node.set_z(msg.position.z)
 	if sprite:
