@@ -10,6 +10,8 @@ const CONNECTED = "connected"
 const DISCONNECTED = "disconnected"
 
 const LOGIN = "Login"
+const LOGIN_SUCCESS = "LoginSuccess"
+const SYNCHRONIZE_REQUEST = "SynchronizeRequest"
 const CREATE_ENTITY = "CreateEntity"
 const DELETE_ENTITY = "DeleteEntity"
 const SET_CAMERA    = "SetCamera"
@@ -23,8 +25,10 @@ func _ready():
 	
 	add_user_signal(CONNECTED)
 	add_user_signal(DISCONNECTED)
-	
+
 	add_user_signal(LOGIN)
+	add_user_signal(LOGIN_SUCCESS)
+
 	add_user_signal(CREATE_ENTITY)
 	add_user_signal(DELETE_ENTITY)
 	add_user_signal(SET_CAMERA)
@@ -44,8 +48,11 @@ func get_connected():
 
 # High level commands
 
-func login():
-	send({ "data": "" }, LOGIN)
+func login(player_data):
+	send({ "playerName": player_data.name, "data": "" }, LOGIN)
+
+func synchronize_request():
+	send({}, SYNCHRONIZE_REQUEST)
 
 func move_player(direction):
 	send({ "direction": direction }, MOVE_DIRECTION)

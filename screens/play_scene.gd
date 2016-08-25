@@ -17,6 +17,7 @@ func _ready():
 	network_hub = global.network_hub
 	entity_scene_mapper = global.entity_scene_mapper
 
+	network_hub.connect(network_hub.CONNECTED, self, '_on_connection')
 	network_hub.connect(network_hub.CREATE_ENTITY, self, '_on_create_entity')
 	network_hub.connect(network_hub.DELETE_ENTITY, self, '_on_delete_entity')
 	network_hub.connect(network_hub.SET_CAMERA, self, '_on_set_camera')
@@ -54,6 +55,10 @@ func _input(event):
 			move('WEST')
 
 # Network callbacks
+
+# This is more like "on reconnection"
+func _on_connected():
+	network_hub.login(global.player_data)
 
 func _on_create_entity(msg):
 	var node = create_entity_node(msg)

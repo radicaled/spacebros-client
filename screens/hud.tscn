@@ -46,7 +46,7 @@ size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = -32.0
 margin/top = 352.0
-margin/right = 149.0
+margin/right = 224.0
 margin/bottom = 448.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Panel"]
@@ -57,7 +57,7 @@ size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = 0.0
 margin/top = 0.0
-margin/right = 181.0
+margin/right = 256.0
 margin/bottom = 96.0
 bbcode/enabled = true
 bbcode/bbcode = "Welcome to...\n\n[b]THE JAM[/b]"
@@ -71,7 +71,7 @@ size_flags/horizontal = 2
 size_flags/vertical = 2
 margin/left = 0.0
 margin/top = 96.0
-margin/right = 181.0
+margin/right = 256.0
 margin/bottom = 120.0
 placeholder/alpha = 0.6
 focus_mode = 2
