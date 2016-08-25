@@ -13,8 +13,8 @@ var connecting = false
 var connected = false
 var streamPeer = StreamPeerTCP.new()
 
-var hasEmittedConnectionEvent = false
-var hasEmittedDisconnectionEvent = true
+var has_emitted_connection_event = false
+var has_emitted_disconnection_event = true
 var thread = Thread.new()
 var mutex = Mutex.new()
 var use_threads = true
@@ -65,7 +65,7 @@ func send(data):
 	streamPeer.put_8(83) # S
 	streamPeer.put_8(71) # G
 	streamPeer.put_u32(rawArray.size()) # Length of Message in bytes
-	streamPeer.put_partial_data(rawArray) # Actual data	
+	streamPeer.put_partial_data(rawArray) # Actual data
 	
 	mutex.unlock()
 	print("Sent data: " + data.to_json())
@@ -74,6 +74,7 @@ func _get_waiting_message():
 	# wait for a valid header...
 	var data = streamPeer.get_data(3)
 	var header = RawArray(data[1]).get_string_from_ascii()
+
 	if header == 'MSG':
 		# loop until collected entire do-dawdle
 		while true:
@@ -86,10 +87,10 @@ func _check_connection():
 	if streamPeer.get_status() == StreamPeerTCP.STATUS_CONNECTED:
 		connecting = false
 		connected = true
-		if !hasEmittedConnectionEvent:
-			hasEmittedConnectionEvent = true
-			hasEmittedDisconnectionEvent = false
-			emit_signal(CONNECTED)
+		if !has_emitted_connection_event:
+			has_emitted_connection_event = true
+			has_emitted_disconnection_event = false
+			call_deferred("emit_signal", CONNECTED)
 	if streamPeer.get_status() == StreamPeerTCP.STATUS_CONNECTING:
 		connected = false
 		connecting = true
@@ -102,7 +103,7 @@ func _check_connection():
 		connected = false
 		connecting = false
 		# print("Status: Disconnected")
-		if !hasEmittedDisconnectionEvent:
-			hasEmittedDisconnectionEvent = true
-			hasEmittedConnectionEvent = false
-			emit_signal(DISCONNECTED)
+		if !has_emitted_disconnection_event:
+			has_emitted_disconnection_event = true
+			has_emitted_connection_event = false
+			call_deferred("emit_signal", DISCONNECTED)
