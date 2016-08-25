@@ -15,5 +15,9 @@ func add_entity(entityId, node):
 func remove_entity(entityId, node):
 	entities.erase(entityId)
 
+func get_entity(entity_id):
+	if entities.has(entity_id):
+		return entities[entity_id]
+
 func size():
 	return entities.size()

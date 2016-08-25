@@ -18,6 +18,23 @@ func _ready():
 	network_hub.connect(network_hub.CREATE_ENTITY, self, '_on_create_entity')
 	network_hub.connect(network_hub.DELETE_ENTITY, self, '_on_delete_entity')
 	network_hub.connect(network_hub.SET_CAMERA, self, '_on_set_camera')
+	network_hub.connect(network_hub.MOVE_TO_POSITION, self, '_on_move_to_position')
+
+	set_process_input(true)
+
+func _input(event):
+	if event.type == InputEvent.KEY:
+		if event.is_action_pressed("player_move_up"):
+			move('NORTH')
+		if event.is_action_pressed("player_move_down"):
+			move('SOUTH')
+		if event.is_action_pressed("player_move_right"):
+			move('EAST')
+		if event.is_action_pressed("player_move_left"):
+			move('WEST')
+
+
+# Network callbacks
 
 func _on_create_entity(msg):
 	var node = create_entity_node(msg)
@@ -36,6 +53,14 @@ func _on_set_camera(msg):
 	var camera = get_node("Camera2D")
 	camera.set_pos(Vector2(msg.position.x * TILE_WIDTH, msg.position.y * TILE_HEIGHT))
 
+func _on_move_to_position(msg):
+	var entity_node = entity_hub.get_entity(msg.entityId)
+	if entity_node:
+		entity_node.set_pos(Vector2(msg.position.x * TILE_WIDTH, msg.position.y * TILE_HEIGHT))
+		entity_node.set_z(msg.position.z)
+
+# Helper Functions
+
 func create_entity_node(msg):
 	var scene = entity_scene_mapper.map(msg.type)
 	if !scene:
@@ -47,3 +72,6 @@ func create_entity_node(msg):
 	if sprite:
 		sprite.set_frame(msg.graphic.tileId)
 	return node
+
+func move(direction):
+	network_hub.move_player(direction)

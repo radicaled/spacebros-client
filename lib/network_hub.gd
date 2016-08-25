@@ -26,8 +26,15 @@ func _ready():
 func set_client(client_instance):
 	client = client_instance
 
+# High level commands
+
 func login():
 	send({ "data": "" }, LOGIN)
+
+func move_player(direction):
+	send({ "direction": direction }, MOVE_DIRECTION)
+
+# Low level commands
 
 func send(data, type):
 	var classProperty = _prefix + type
@@ -44,6 +51,7 @@ func _on_message(msg):
 	if (indexOfPrefix != 0):
 		print("UNKNOWN MESSAGE: " + msg)
 	var short_name = message_name.right(_prefix.length())
+	print("received msg" + message_name)
 	emit_signal(short_name, json)
 
 
