@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=1]
+[gd_scene load_steps=3 format=1]
 
 [ext_resource path="res://screens/play_scene.gd" type="Script" id=1]
+[ext_resource path="res://screens/hud.tscn" type="PackedScene" id=2]
 
 [node name="PlayScreen" type="Node2D"]
 
@@ -25,19 +26,12 @@ drag_margin/top = 0.0
 drag_margin/right = 0.0
 drag_margin/bottom = 0.0
 
-[node name="Label" type="Label" parent="."]
+[node name="HUD" parent="Camera2D" instance=ExtResource( 2 )]
 
-focus/ignore_mouse = true
-focus/stop_mouse = true
-size_flags/horizontal = 2
-size_flags/vertical = 0
-margin/left = -514.0
-margin/top = -300.0
-margin/right = 120.0
-margin/bottom = -213.0
-text = "GAME TURN ON"
-percent_visible = 1.0
-lines_skipped = 0
-max_lines_visible = -1
+transform/pos = Vector2( -460.543, -259.878 )
+transform/scale = Vector2( 1.53856, 1.17711 )
+z/z = 99
+
+[connection signal="text_submitted" from="Camera2D/HUD" to="." method="_on_HUD_text_submitted"]
 
 

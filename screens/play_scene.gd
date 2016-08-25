@@ -21,6 +21,7 @@ func _ready():
 	network_hub.connect(network_hub.DELETE_ENTITY, self, '_on_delete_entity')
 	network_hub.connect(network_hub.SET_CAMERA, self, '_on_set_camera')
 	network_hub.connect(network_hub.MOVE_TO_POSITION, self, '_on_move_to_position')
+	network_hub.connect(network_hub.TEXT_MESSAGE, self, '_on_text_message')
 
 	camera_target = get_node("Camera2D").get_pos()
 	set_process(true)
@@ -28,10 +29,18 @@ func _ready():
 
 func _process(delta):
 	var camera = get_node("Camera2D")
+	
 	if camera_target != camera.get_pos():
 		var lerpy = camera.get_pos().linear_interpolate(camera_target, delta)
 		camera.set_pos(lerpy)
-
+	
+	if network_hub.get_connected():
+		get_node("Camera2D/HUD/Connection Status").set_text("CONNECTED")
+	else:
+		get_node("Camera2D/HUD/Connection Status").set_text("DISCONNECTED")
+	
+	get_node("Camera2D/HUD/FPS").set_text("FPS: " + str(OS.get_frames_per_second()))
+		
 
 func _input(event):
 	if event.type == InputEvent.KEY:
@@ -43,7 +52,6 @@ func _input(event):
 			move('EAST')
 		if event.is_action_pressed("player_move_left"):
 			move('WEST')
-
 
 # Network callbacks
 
@@ -71,6 +79,11 @@ func _on_move_to_position(msg):
 		entity_node.set_pos(Vector2(msg.position.x * TILE_WIDTH, msg.position.y * TILE_HEIGHT))
 		entity_node.set_z(msg.position.z)
 
+func _on_text_message(msg):
+	var text = msg.message
+	var hud = get_node("Camera2D/HUD")
+	hud.append_chat_text(text)
+
 # Helper Functions
 
 func create_entity_node(msg):
@@ -87,3 +100,8 @@ func create_entity_node(msg):
 
 func move(direction):
 	network_hub.move_player(direction)
+
+# UI callbacks
+
+func _on_HUD_text_submitted(msg):
+	network_hub.text(msg)

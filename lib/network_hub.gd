@@ -2,7 +2,12 @@
 extends Node
 
 var client
+var connected = false
+
 const _prefix = "spacebros.networking.Messages$"
+
+const CONNECTED = "connected"
+const DISCONNECTED = "disconnected"
 
 const LOGIN = "Login"
 const CREATE_ENTITY = "CreateEntity"
@@ -15,6 +20,10 @@ const TEXT_MESSAGE = "TextMessage"
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
+	
+	add_user_signal(CONNECTED)
+	add_user_signal(DISCONNECTED)
+	
 	add_user_signal(LOGIN)
 	add_user_signal(CREATE_ENTITY)
 	add_user_signal(DELETE_ENTITY)
@@ -25,6 +34,13 @@ func _ready():
 
 func set_client(client_instance):
 	client = client_instance
+	client.connect(client.CONNECTED, self, "_on_connection")
+	client.connect(client.DISCONNECTED, self, "_on_disconnection")
+
+# Non-network related members
+
+func get_connected():
+	return connected
 
 # High level commands
 
@@ -34,12 +50,24 @@ func login():
 func move_player(direction):
 	send({ "direction": direction }, MOVE_DIRECTION)
 
+func text(msg):
+	send({ "message": msg }, TEXT_MESSAGE)
+
 # Low level commands
 
 func send(data, type):
 	var classProperty = _prefix + type
 	data["@class"] = classProperty
 	client.send(data)
+
+# Callbacks for connection / disconnection
+func _on_connection():
+	connected = true
+	emit_signal(CONNECTED)
+
+func _on_disconnection():
+	connected = false
+	emit_signal(DISCONNECTED)
 
 # Sort out which message came in and call the appropriate listener.
 func _on_message(msg):
