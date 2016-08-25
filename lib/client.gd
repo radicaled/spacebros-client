@@ -41,9 +41,8 @@ func _process(delta):
 func _run():
 	_check_connection()
 	if connected:
-		if streamPeer.get_available_bytes() > 0:
-			var msg = _get_waiting_message()
-			call_deferred("emit_signal", MESSAGE_RECEIVED, msg)
+		var msg = _get_waiting_message()
+		call_deferred("emit_signal", MESSAGE_RECEIVED, msg)
 
 func _run_in_thread(user_data):
 	while true:
@@ -72,17 +71,13 @@ func send(data):
 
 func _get_waiting_message():
 	# wait for a valid header...
-	var data = streamPeer.get_data(3)
-	var header = RawArray(data[1]).get_string_from_ascii()
-
+	var header = streamPeer.get_string(3)
 	if header == 'MSG':
-		# loop until collected entire do-dawdle
-		while true:
-			if streamPeer.get_available_bytes() > 4:
-				var expectedLength = streamPeer.get_u32()
-				var data = streamPeer.get_data(expectedLength)
-				return RawArray(data[1]).get_string_from_utf8()
-	
+		var expectedLength = streamPeer.get_u32()
+		return streamPeer.get_utf8_string(expectedLength)
+	else:
+		print("UNKNOWN HEADER:" + str(header))
+
 func _check_connection():
 	if streamPeer.get_status() == StreamPeerTCP.STATUS_CONNECTED:
 		connecting = false
