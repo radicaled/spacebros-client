@@ -32,6 +32,8 @@ func _on_Text_Input_text_entered( text ):
 		text_input.set_text("")
 		text_input.release_focus()
 		emit_signal(TEXT_SUBMITTED, text)
+	else:
+		text_input.release_focus()
 
 
 func _on_Text_Input_input_event( ev ):
