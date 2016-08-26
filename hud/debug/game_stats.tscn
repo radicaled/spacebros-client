@@ -1,0 +1,48 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://hud/debug/game_stats.gd" type="Script" id=1]
+
+[node name="Debug Info" type="VBoxContainer"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = -32.0
+margin/top = -32.0
+margin/right = 8.0
+margin/bottom = 8.0
+alignment = 0
+script/script = ExtResource( 1 )
+
+[node name="FPS" type="Label" parent="."]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 182.0
+margin/bottom = 14.0
+text = "This hug"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+[node name="Connection Status" type="Label" parent="."]
+
+focus/ignore_mouse = true
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 0
+margin/left = 0.0
+margin/top = 18.0
+margin/right = 182.0
+margin/bottom = 32.0
+text = "Connection Status: Unknown"
+percent_visible = 1.0
+lines_skipped = 0
+max_lines_visible = -1
+
+

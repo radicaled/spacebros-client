@@ -1,0 +1,119 @@
+[gd_scene load_steps=2 format=1]
+
+[ext_resource path="res://hud/action_bar.gd" type="Script" id=1]
+
+[node name="Action Bar" type="GridContainer"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 524.0
+margin/bottom = 97.0
+columns = 4
+script/script = ExtResource( 1 )
+
+[node name="ButtonGroup" type="ButtonGroup" parent="."]
+
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 232.0
+margin/bottom = 20.0
+alignment = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ButtonGroup"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = false
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 232.0
+margin/bottom = 20.0
+alignment = 0
+
+[node name="Look At" type="Button" parent="ButtonGroup/HBoxContainer"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 0.0
+margin/top = 0.0
+margin/right = 69.0
+margin/bottom = 20.0
+toggle_mode = true
+is_pressed = true
+click_on_press = true
+enabled_focus_mode = 2
+shortcut = null
+text = "LOOK AT"
+flat = false
+
+[node name="Use" type="Button" parent="ButtonGroup/HBoxContainer"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 73.0
+margin/top = 0.0
+margin/right = 109.0
+margin/bottom = 20.0
+toggle_mode = true
+click_on_press = true
+enabled_focus_mode = 2
+shortcut = null
+text = "USE"
+flat = false
+
+[node name="Pick Up" type="Button" parent="ButtonGroup/HBoxContainer"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 113.0
+margin/top = 0.0
+margin/right = 176.0
+margin/bottom = 20.0
+toggle_mode = true
+click_on_press = true
+enabled_focus_mode = 2
+shortcut = null
+text = "PICK UP"
+flat = false
+
+[node name="Grab" type="Button" parent="ButtonGroup/HBoxContainer"]
+
+focus/ignore_mouse = false
+focus/stop_mouse = true
+size_flags/horizontal = 2
+size_flags/vertical = 2
+margin/left = 180.0
+margin/top = 0.0
+margin/right = 228.0
+margin/bottom = 20.0
+toggle_mode = true
+click_on_press = true
+enabled_focus_mode = 2
+shortcut = null
+text = "GRAB"
+flat = false
+
+[connection signal="pressed" from="ButtonGroup/HBoxContainer/Look At" to="." method="_on_Look_At_pressed"]
+
+[connection signal="pressed" from="ButtonGroup/HBoxContainer/Use" to="." method="_on_Use_pressed"]
+
+[connection signal="pressed" from="ButtonGroup/HBoxContainer/Pick Up" to="." method="_on_Pick_Up_pressed"]
+
+[connection signal="pressed" from="ButtonGroup/HBoxContainer/Grab" to="." method="_on_Grab_pressed"]
+
+

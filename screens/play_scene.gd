@@ -11,6 +11,9 @@ var entity_scene_mapper
 
 var camera_target
 
+onready var action_bar = get_node("Camera2D/Action Bar")
+onready var chat_window = get_node("Camera2D/Chat Window")
+
 func _ready():
 	var global = get_node("/root/global")
 	entity_hub = global.entity_hub
@@ -34,19 +37,18 @@ func _process(delta):
 	if camera_target != camera.get_pos():
 		var lerpy = camera.get_pos().linear_interpolate(camera_target, delta)
 		camera.set_pos(lerpy)
-	
-	if network_hub.get_connected():
-		get_node("Camera2D/HUD/Connection Status").set_text("CONNECTED")
-	else:
-		get_node("Camera2D/HUD/Connection Status").set_text("DISCONNECTED")
-	
-	get_node("Camera2D/HUD/FPS").set_text("FPS: " + str(OS.get_frames_per_second()))
-		
+
 
 func _input(event):
+	if event.type == InputEvent.MOUSE_BUTTON:
+		if event.is_action_pressed("game_select"):
+			pass
+		if event.is_action("game_interact"):
+			var action_mode = action_bar.get_action_mode()
+			print("I am going to " + str(action_mode) + " at this")
+		
 	if event.type == InputEvent.KEY:
-		var hud = get_node("Camera2D/HUD/")
-		if !hud.has_focus():
+		if !chat_window.has_focus():
 			if event.is_action_pressed("player_move_up"):
 				move('NORTH')
 			if event.is_action_pressed("player_move_down"):
@@ -56,7 +58,7 @@ func _input(event):
 			if event.is_action_pressed("player_move_left"):
 				move('WEST')
 			if event.is_action_pressed("text_submit"):
-				hud.call_deferred('focus_chat_input')
+				chat_window.call_deferred('focus_chat_input')
 
 # Network callbacks
 
@@ -90,8 +92,7 @@ func _on_move_to_position(msg):
 
 func _on_text_message(msg):
 	var text = msg.message
-	var hud = get_node("Camera2D/HUD")
-	hud.append_chat_text(text)
+	chat_window.append_chat_text(text)
 	if msg.textType == "SPEAK" && msg.entityId:
 		# Let's display this over the entity's head in a richtext label
 		var speech_bubble_scene = preload("res://fx/speech_bubble.tscn")
@@ -133,5 +134,5 @@ func move(direction):
 
 # UI callbacks
 
-func _on_HUD_text_submitted(msg):
-	network_hub.speak(msg)
+func _on_Chat_Window_text_submitted( text ):
+	network_hub.speak(text)
