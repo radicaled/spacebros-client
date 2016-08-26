@@ -45,14 +45,18 @@ func _process(delta):
 
 func _input(event):
 	if event.type == InputEvent.KEY:
-		if event.is_action_pressed("player_move_up"):
-			move('NORTH')
-		if event.is_action_pressed("player_move_down"):
-			move('SOUTH')
-		if event.is_action_pressed("player_move_right"):
-			move('EAST')
-		if event.is_action_pressed("player_move_left"):
-			move('WEST')
+		var hud = get_node("Camera2D/HUD/")
+		if !hud.has_focus():
+			if event.is_action_pressed("player_move_up"):
+				move('NORTH')
+			if event.is_action_pressed("player_move_down"):
+				move('SOUTH')
+			if event.is_action_pressed("player_move_right"):
+				move('EAST')
+			if event.is_action_pressed("player_move_left"):
+				move('WEST')
+			if event.is_action_pressed("text_submit"):
+				hud.call_deferred('focus_chat_input')
 
 # Network callbacks
 
@@ -88,6 +92,27 @@ func _on_text_message(msg):
 	var text = msg.message
 	var hud = get_node("Camera2D/HUD")
 	hud.append_chat_text(text)
+	if msg.textType == "SPEAK" && msg.entityId:
+		# Let's display this over the entity's head in a richtext label
+		var speech_bubble_scene = preload("res://fx/speech_bubble.tscn")
+		var speech_bubble = speech_bubble_scene.instance()
+		var node = entity_hub.get_entity(msg.entityId)
+		var existing_speech_bubble = node.get_node("Speech Bubble")
+		if existing_speech_bubble:
+			node.remove_child(existing_speech_bubble)
+		node.add_child(speech_bubble)
+		# Probable dimensions: 32px by 32px.
+		# Above head: -32px
+		# Slightly centered: -16px
+		# TODO: stop doing this!
+		text = text.split(':')[1]
+		# TODO: stop doing this, too
+		var new_pos = Vector2(-64, -64)
+		# This is OK, I guess
+		speech_bubble.set_pos(new_pos)
+		speech_bubble.display_text(text)
+
+
 
 # Helper Functions
 
@@ -109,4 +134,4 @@ func move(direction):
 # UI callbacks
 
 func _on_HUD_text_submitted(msg):
-	network_hub.text(msg)
+	network_hub.speak(msg)

@@ -57,8 +57,8 @@ func synchronize_request():
 func move_player(direction):
 	send({ "direction": direction }, MOVE_DIRECTION)
 
-func text(msg):
-	send({ "message": msg }, TEXT_MESSAGE)
+func speak(msg):
+	send({ "message": msg, "textType": "SPEAK" }, TEXT_MESSAGE)
 
 # Low level commands
 
