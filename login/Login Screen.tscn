@@ -5,7 +5,7 @@
 
 [sub_resource type="GDScript" id=1]
 
-script/source = "extends Button\n\nvar explosion = preload(\"res://Particles2D.tscn\")\n\nfunc _input_event(ev):\n\tif (ev.type == InputEvent.MOUSE_BUTTON && ev.pressed):\t\t\n\t\tvar particles = explosion.instance()\n\t\tvar parent = get_node(\"../../../Node2D\")\n\t\tparent.add_child(particles)\n\t\tparticles.set_pos(get_viewport().get_mouse_pos())\n\t\tparticles.set_emitting(true)\n\t\t\n\t\tvar player_data = {\n\t\t\t\"name\": get_node(\"../LineEdit\").get_text()\n\t\t}\n\t\tvar global = get_node(\"/root/global\")\n\t\tglobal.connectToServer(player_data)\n\t\t"
+script/source = "extends Button\n\nvar explosion = preload(\"res://Particles2D.tscn\")\n\nsignal login(text)\n\nfunc _input_event(ev):\n\tif (ev.type == InputEvent.MOUSE_BUTTON && ev.pressed):\n\t\tvar particles = explosion.instance()\n\t\tvar parent = get_node(\"../../../Node2D\")\n\t\tparent.add_child(particles)\n\t\tparticles.set_pos(get_viewport().get_mouse_pos())\n\t\tparticles.set_emitting(true)\n\t\t\n\t\temit_signal(\"login\", get_node(\"../LineEdit\").get_text())"
 
 [node name="Node2D" type="Node2D"]
 
@@ -72,6 +72,7 @@ margin/top = 238.0
 margin/right = 442.0
 margin/bottom = 268.0
 text = "Arsehole"
+placeholder/text = "Username"
 placeholder/alpha = 0.6
 focus_mode = 2
 caret/caret_blink = false
@@ -80,5 +81,7 @@ caret/caret_blink_speed = 0.65
 [node name="Explosion" parent="." instance=ExtResource( 2 )]
 
 transform/pos = Vector2( 518.555, 404.99 )
+
+[connection signal="login" from="Panel/Button" to="." method="_on_Button_login"]
 
 
