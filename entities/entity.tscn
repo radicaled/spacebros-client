@@ -1,0 +1,7 @@
+[gd_scene format=1]
+
+[node name="Entity" type="Node2D"]
+
+[node name="Sprite" type="Sprite" parent="."]
+
+
