@@ -40,13 +40,6 @@ func _process(delta):
 
 
 func _input(event):
-	if event.type == InputEvent.MOUSE_BUTTON:
-		if event.is_action_pressed("game_select"):
-			pass
-		if event.is_action("game_interact"):
-			var action_mode = action_bar.get_action_mode()
-			print("I am going to " + str(action_mode) + " at this")
-		
 	if event.type == InputEvent.KEY:
 		if !chat_window.has_focus():
 			if event.is_action_pressed("player_move_up"):
@@ -70,6 +63,7 @@ func _on_create_entity(msg):
 	var node = create_entity_node(msg)
 	entity_hub.add_entity(msg['entityId'], node)
 	if node:
+		node.connect("clicked", self, "_on_entity_clicked", [node])
 		add_child(node)
 
 func _on_delete_entity(msg):
@@ -114,6 +108,13 @@ func _on_text_message(msg):
 		speech_bubble.display_text(text)
 
 
+func _on_entity_clicked(event, node):
+	if event.type == InputEvent.MOUSE_BUTTON:
+		if event.is_action_pressed("game_select"):
+			pass
+		if event.is_action_pressed("game_interact"):
+			var action_mode = action_bar.get_action_mode()
+			print("I am going to " + str(action_mode) + " this: " + str(node.get_entity_id()))
 
 # Helper Functions
 
@@ -127,6 +128,7 @@ func create_entity_node(msg):
 	node.set_z(msg.position.z)
 	if sprite:
 		sprite.set_frame(msg.graphic.tileId)
+	node.set_entity_id(msg.entityId)
 	return node
 
 func move(direction):
