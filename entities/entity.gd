@@ -3,6 +3,8 @@
 extends Area2D
 
 signal clicked(event)
+signal hover()
+signal unhover()
 
 var entity_id
 
@@ -20,3 +22,9 @@ func set_entity_id(entity_id):
 
 func get_entity_id():
 	return self.entity_id
+
+func _on_entity_mouse_enter():
+	emit_signal("hover")
+
+func _on_entity_mouse_exit():
+	emit_signal("unhover")

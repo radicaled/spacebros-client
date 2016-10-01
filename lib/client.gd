@@ -54,6 +54,8 @@ func connectToGameServer(host, port):
 	connecting = true
 	
 func send(data):
+	print("Size of current recv buffer: " + str(streamPeer.get_available_bytes()))
+	print("Current connection status: " + str(streamPeer.get_status()))
 	mutex.lock()
 	# Format:
 	# "MSG" - ASCII (77, 83, 71)

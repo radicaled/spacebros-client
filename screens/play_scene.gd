@@ -11,6 +11,8 @@ var entity_scene_mapper
 
 var camera_target
 
+var entities_near_mouse = []
+
 onready var action_bar = get_node("Camera2D/Action Bar")
 onready var chat_window = get_node("Camera2D/Chat Window")
 
@@ -52,6 +54,16 @@ func _input(event):
 				move('WEST')
 			if event.is_action_pressed("text_submit"):
 				chat_window.call_deferred('focus_chat_input')
+	if event.type == InputEvent.MOUSE_BUTTON:
+		if event.is_action_pressed("game_select"):
+			pass
+		if event.is_action_pressed("game_interact"):
+			var action_mode = action_bar.get_action_mode()
+			var node_ids = []
+			for node in entities_near_mouse:
+				node_ids.append(node.get_entity_id())
+			print("I am going to " + str(action_mode) + " this: " + str(node_ids))
+			# node.add_child(Particles2D.new())
 
 # Network callbacks
 
@@ -64,6 +76,8 @@ func _on_create_entity(msg):
 	entity_hub.add_entity(msg['entityId'], node)
 	if node:
 		node.connect("clicked", self, "_on_entity_clicked", [node])
+		node.connect("hover", self, "_on_entity_hover", [node])
+		node.connect("unhover", self, "_on_entity_unhover", [node])
 		add_child(node)
 
 func _on_delete_entity(msg):
@@ -109,12 +123,15 @@ func _on_text_message(msg):
 
 
 func _on_entity_clicked(event, node):
-	if event.type == InputEvent.MOUSE_BUTTON:
-		if event.is_action_pressed("game_select"):
-			pass
-		if event.is_action_pressed("game_interact"):
-			var action_mode = action_bar.get_action_mode()
-			print("I am going to " + str(action_mode) + " this: " + str(node.get_entity_id()))
+	pass
+
+func _on_entity_hover(node):
+	if (not node in entities_near_mouse):
+		entities_near_mouse.append(node)
+
+func _on_entity_unhover(node):
+	if (node in entities_near_mouse):
+		entities_near_mouse.erase(node)
 
 # Helper Functions
 
