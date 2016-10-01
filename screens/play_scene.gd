@@ -62,8 +62,16 @@ func _input(event):
 			var node_ids = []
 			for node in entities_near_mouse:
 				node_ids.append(node.get_entity_id())
+			var popup_menu = PopupMenu.new()
+			for node_id in node_ids:
+				popup_menu.add_item("Item #" + str(node_id))
 			print("I am going to " + str(action_mode) + " this: " + str(node_ids))
-			# node.add_child(Particles2D.new())
+			
+			
+			add_child(popup_menu)
+			popup_menu.set_exclusive(true)
+			popup_menu.set_pos(get_local_mouse_pos() + Vector2(15, 0))
+			popup_menu.show_modal()
 
 # Network callbacks
 
