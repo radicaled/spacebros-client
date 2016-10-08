@@ -69,9 +69,10 @@ func _input(event):
 				node_ids.append(node.get_entity_id())
 			for node_id in node_ids:
 				popup_menu.add_item("Item #" + str(node_id), node_id)
-
-			popup_menu.set_pos(get_local_mouse_pos() + Vector2(15, 0))
-			popup_menu.show_modal()
+			
+			if node_ids.size() > 0:
+				popup_menu.set_pos(get_local_mouse_pos() + Vector2(15, 0))
+				popup_menu.show_modal()
 
 		if event.is_action_pressed("game_interact"):
 			popup_menu.clear()
@@ -83,7 +84,10 @@ func _input(event):
 				else:
 					if closet_node.get_z() <= node.get_z():
 						closet_node = node
-			print("I am going to " + str(action_mode) + " this: " + str(closet_node.get_entity_id()))
+			if closet_node:
+				print("I am going to " + str(action_mode) + " this: " + str(closet_node.get_entity_id()))
+			else:
+				print("Nothing to " + str(action_mode) + " with or at")
 
 # Network callbacks
 
