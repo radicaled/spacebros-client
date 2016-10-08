@@ -13,6 +13,8 @@ var camera_target
 
 var entities_near_mouse = []
 
+var popup_menu = PopupMenu.new()
+
 onready var action_bar = get_node("Camera2D/Action Bar")
 onready var chat_window = get_node("Camera2D/Chat Window")
 
@@ -30,6 +32,10 @@ func _ready():
 	network_hub.connect(network_hub.TEXT_MESSAGE, self, '_on_text_message')
 
 	camera_target = get_node("Camera2D").get_pos()
+
+	add_child(popup_menu)
+	popup_menu.set_exclusive(true)
+
 	set_process(true)
 	set_process_input(true)
 
@@ -56,22 +62,28 @@ func _input(event):
 				chat_window.call_deferred('focus_chat_input')
 	if event.type == InputEvent.MOUSE_BUTTON:
 		if event.is_action_pressed("game_select"):
-			pass
-		if event.is_action_pressed("game_interact"):
+			popup_menu.clear()
 			var action_mode = action_bar.get_action_mode()
 			var node_ids = []
 			for node in entities_near_mouse:
 				node_ids.append(node.get_entity_id())
-			var popup_menu = PopupMenu.new()
 			for node_id in node_ids:
-				popup_menu.add_item("Item #" + str(node_id))
-			print("I am going to " + str(action_mode) + " this: " + str(node_ids))
-			
-			
-			add_child(popup_menu)
-			popup_menu.set_exclusive(true)
+				popup_menu.add_item("Item #" + str(node_id), node_id)
+
 			popup_menu.set_pos(get_local_mouse_pos() + Vector2(15, 0))
 			popup_menu.show_modal()
+
+		if event.is_action_pressed("game_interact"):
+			popup_menu.clear()
+			var action_mode = action_bar.get_action_mode()
+			var closet_node
+			for node in entities_near_mouse:
+				if not closet_node:
+					closet_node = node
+				else:
+					if closet_node.get_z() <= node.get_z():
+						closet_node = node
+			print("I am going to " + str(action_mode) + " this: " + str(closet_node.get_entity_id()))
 
 # Network callbacks
 
