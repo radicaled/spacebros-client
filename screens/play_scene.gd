@@ -61,13 +61,11 @@ func _input(event):
 		if event.is_action_pressed("game_select"):
 			context_menu.clear()
 			var action_mode = action_bar.get_action_mode()
-			var node_ids = []
-			for node in entities_near_mouse:
-				node_ids.append(node.get_entity_id())
-			for node_id in node_ids:
-				context_menu.add_item("Item #" + str(node_id), node_id)
+			var nodes = entities_near_mouse
+			for node in nodes:
+				context_menu.add_item(node.get_entity_name(), node.get_entity_id())
 			
-			if node_ids.size() > 0:
+			if nodes.size() > 0:
 				context_menu.set_pos(get_local_mouse_pos() + Vector2(15, 0))
 				context_menu.show_modal()
 
@@ -166,6 +164,7 @@ func create_entity_node(msg):
 	if sprite:
 		sprite.set_frame(msg.graphic.tileId)
 	node.set_entity_id(msg.entityId)
+	node.set_entity_name(msg.name)
 	return node
 
 func move(direction):
