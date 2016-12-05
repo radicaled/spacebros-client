@@ -58,6 +58,7 @@ func _input(event):
 			if event.is_action_pressed("text_submit"):
 				chat_window.call_deferred('focus_chat_input')
 	if event.type == InputEvent.MOUSE_BUTTON:
+		# TODO: FIX: accidentally selecting items underneath the cursor instead of the context menu
 		if event.is_action_pressed("game_select"):
 			context_menu.clear()
 			var action_mode = action_bar.get_action_mode()
@@ -79,7 +80,8 @@ func _input(event):
 					if closet_node.get_z() <= node.get_z():
 						closet_node = node
 			if closet_node:
-				print("I am going to " + str(action_mode) + " this: " + str(closet_node.get_entity_id()))
+				var desc = str(closet_node.get_entity_id()) + " (" + str(closet_node.get_entity_name())  + ")"
+				print("I am going to " + str(action_mode) + " this: " + desc)
 			else:
 				print("Nothing to " + str(action_mode) + " with or at")
 
