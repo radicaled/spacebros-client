@@ -30,6 +30,7 @@ func _ready():
 	network_hub.connect(network_hub.SET_CAMERA, self, '_on_set_camera')
 	network_hub.connect(network_hub.MOVE_TO_POSITION, self, '_on_move_to_position')
 	network_hub.connect(network_hub.TEXT_MESSAGE, self, '_on_text_message')
+	network_hub.connect(network_hub.UPDATE_GRAPHIC, self, '_on_update_graphic')
 
 	camera_target = get_node("Camera2D").get_pos()
 
@@ -82,6 +83,7 @@ func _input(event):
 			if closet_node:
 				var desc = str(closet_node.get_entity_id()) + " (" + str(closet_node.get_entity_name())  + ")"
 				print("I am going to " + str(action_mode) + " this: " + desc)
+				network_hub.interact(closet_node.get_entity_id(), action_mode)
 			else:
 				print("Nothing to " + str(action_mode) + " with or at")
 
@@ -141,6 +143,13 @@ func _on_text_message(msg):
 		speech_bubble.set_pos(new_pos)
 		speech_bubble.display_text(text)
 
+func _on_update_graphic(msg):
+	var entity = entity_hub.get_entity(msg.entityId)
+	var sprite = entity.get_node("Sprite")
+	if sprite:
+		# TODO: we're ignoring entity file changes...
+		sprite.set_frame(msg.graphic.tileId)
+		print("Updated Sprite")
 
 func _on_entity_clicked(event, node):
 	pass
@@ -152,6 +161,7 @@ func _on_entity_hover(node):
 func _on_entity_unhover(node):
 	if (node in entities_near_mouse):
 		entities_near_mouse.erase(node)
+
 
 # Helper Functions
 

@@ -18,6 +18,8 @@ const SET_CAMERA    = "SetCamera"
 const MOVE_DIRECTION = "MoveDirection"
 const MOVE_TO_POSITION = "MoveToPosition"
 const TEXT_MESSAGE = "TextMessage"
+const INTERACTION = "Interaction"
+const UPDATE_GRAPHIC = "UpdateGraphic"
 
 func _ready():
 	# Called every time the node is added to the scene.
@@ -35,6 +37,8 @@ func _ready():
 	add_user_signal(MOVE_DIRECTION)
 	add_user_signal(MOVE_TO_POSITION)
 	add_user_signal(TEXT_MESSAGE)
+	add_user_signal(UPDATE_GRAPHIC)
+
 
 func set_client(client_instance):
 	client = client_instance
@@ -59,6 +63,9 @@ func move_player(direction):
 
 func speak(msg):
 	send({ "message": msg, "textType": "SPEAK" }, TEXT_MESSAGE)
+
+func interact(entity_id, action):
+	send({ "entityId": entity_id, "action": action }, INTERACTION)
 
 # Low level commands
 
