@@ -6,8 +6,12 @@ const FLOORS = preload("res://entities/floors.tscn")
 const PLAYER = HUMAN
 const STRUCTURES = preload("res://entities/structure.tscn")
 const WALLS = preload("res://entities/walls.tscn")
+const SECURITY_DOORS = preload("res://entities/security_doors.tscn")
+const COMMAND_DOORS = preload("res://entities/command_doors.tscn")
 
 const ENTITY_TYPE_TO_SCENE_MAP = {
+	"Doorcomglass": COMMAND_DOORS,
+	"Doorsecglass": SECURITY_DOORS,
 	"human": HUMAN,
 	"floors": FLOORS,
 	"player": PLAYER,
