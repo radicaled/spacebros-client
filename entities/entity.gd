@@ -9,6 +9,8 @@ signal unhover()
 var entity_id
 var entity_name
 
+onready var animation_player = get_node("AnimationPlayer")
+
 func _ready():
 	# Called every time the node is added to the scene.
 	# Initialization here
@@ -31,6 +33,10 @@ func set_entity_id(entity_id):
 
 func get_entity_id():
 	return self.entity_id
+
+func animate(animation_name):
+	if animation_player.has_animation(animation_name):
+		animation_player.play(animation_name)
 
 func _on_entity_mouse_enter():
 	emit_signal("hover")

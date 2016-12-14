@@ -20,6 +20,7 @@ const MOVE_TO_POSITION = "MoveToPosition"
 const TEXT_MESSAGE = "TextMessage"
 const INTERACTION = "Interaction"
 const UPDATE_GRAPHIC = "UpdateGraphic"
+const ANIMATE = "Animate"
 
 func _ready():
 	# Called every time the node is added to the scene.
@@ -38,6 +39,7 @@ func _ready():
 	add_user_signal(MOVE_TO_POSITION)
 	add_user_signal(TEXT_MESSAGE)
 	add_user_signal(UPDATE_GRAPHIC)
+	add_user_signal(ANIMATE)
 
 
 func set_client(client_instance):

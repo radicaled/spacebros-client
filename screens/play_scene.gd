@@ -31,6 +31,7 @@ func _ready():
 	network_hub.connect(network_hub.MOVE_TO_POSITION, self, '_on_move_to_position')
 	network_hub.connect(network_hub.TEXT_MESSAGE, self, '_on_text_message')
 	network_hub.connect(network_hub.UPDATE_GRAPHIC, self, '_on_update_graphic')
+	network_hub.connect(network_hub.ANIMATE, self, '_on_animate')
 
 	camera_target = get_node("Camera2D").get_pos()
 
@@ -150,6 +151,10 @@ func _on_update_graphic(msg):
 		# TODO: we're ignoring entity file changes...
 		sprite.set_frame(msg.graphic.tileId)
 		print("Updated Sprite")
+
+func _on_animate(msg):
+	var entity = entity_hub.get_entity(msg.entityId)
+	entity.animate(msg.animation)
 
 func _on_entity_clicked(event, node):
 	pass
