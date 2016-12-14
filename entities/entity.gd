@@ -39,8 +39,6 @@ func get_entity_id():
 func set_entity_state(state):
 	entity_state = state
 	if state != null:
-		if state.has('door'):
-			print("DOOR STATE EMITTED")
 		emit_signal("state_update", state)
 
 func get_entity_state():
