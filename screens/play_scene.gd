@@ -26,6 +26,7 @@ func _ready():
 
 	network_hub.connect(network_hub.CONNECTED, self, '_on_connection')
 	network_hub.connect(network_hub.CREATE_ENTITY, self, '_on_create_entity')
+	network_hub.connect(network_hub.UPDATE_ENTITY, self, '_on_update_entity')
 	network_hub.connect(network_hub.DELETE_ENTITY, self, '_on_delete_entity')
 	network_hub.connect(network_hub.SET_CAMERA, self, '_on_set_camera')
 	network_hub.connect(network_hub.MOVE_TO_POSITION, self, '_on_move_to_position')
@@ -102,6 +103,11 @@ func _on_create_entity(msg):
 		node.connect("unhover", self, "_on_entity_unhover", [node])
 		add_child(node)
 
+func _on_update_entity(msg):
+	var entity_id = msg['entityId']
+	var node = entity_hub[entity_id]
+	node.set_entity_state(msg.state)
+
 func _on_delete_entity(msg):
 	var entity_id = msg['entityId']
 	var node = entity_hub[entity_id]
@@ -162,7 +168,6 @@ func _on_entity_unhover(node):
 # Helper Functions
 
 func create_entity_node(msg):
-	print("GOT CREATE ENTITY", str(msg))
 	var scene = entity_scene_mapper.map(msg.state.type.name)
 	if !scene:
 		return
@@ -174,6 +179,7 @@ func create_entity_node(msg):
 		sprite.set_frame(msg.state.tileGraphic.tileId)
 	node.set_entity_id(msg.entityId)
 	node.set_entity_name(msg.state.name.name)
+	node.set_entity_state(msg.state)
 	return node
 
 func move(direction):

@@ -5,9 +5,11 @@ extends Area2D
 signal clicked(event)
 signal hover()
 signal unhover()
+signal state_update(state)
 
 var entity_id
 var entity_name
+var entity_state = {}
 
 onready var animation_player = get_node("AnimationPlayer")
 
@@ -33,6 +35,13 @@ func set_entity_id(entity_id):
 
 func get_entity_id():
 	return self.entity_id
+
+func set_entity_state(state):
+	entity_state = state
+	emit_signal("state_update", state)
+
+func get_entity_state(state):
+	return entity_state
 
 func animate(animation_name):
 	if animation_player.has_animation(animation_name):
