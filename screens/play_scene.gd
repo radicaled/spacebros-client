@@ -30,7 +30,6 @@ func _ready():
 	network_hub.connect(network_hub.SET_CAMERA, self, '_on_set_camera')
 	network_hub.connect(network_hub.MOVE_TO_POSITION, self, '_on_move_to_position')
 	network_hub.connect(network_hub.TEXT_MESSAGE, self, '_on_text_message')
-	network_hub.connect(network_hub.UPDATE_GRAPHIC, self, '_on_update_graphic')
 	network_hub.connect(network_hub.ANIMATE, self, '_on_animate')
 
 	camera_target = get_node("Camera2D").get_pos()
@@ -144,14 +143,6 @@ func _on_text_message(msg):
 		speech_bubble.set_pos(new_pos)
 		speech_bubble.display_text(text)
 
-func _on_update_graphic(msg):
-	var entity = entity_hub.get_entity(msg.entityId)
-	var sprite = entity.get_node("Sprite")
-	if sprite:
-		# TODO: we're ignoring entity file changes...
-		sprite.set_frame(msg.graphic.tileId)
-		print("Updated Sprite")
-
 func _on_animate(msg):
 	var entity = entity_hub.get_entity(msg.entityId)
 	entity.animate(msg.animation)
@@ -171,17 +162,18 @@ func _on_entity_unhover(node):
 # Helper Functions
 
 func create_entity_node(msg):
-	var scene = entity_scene_mapper.map(msg.type)
+	print("GOT CREATE ENTITY", str(msg))
+	var scene = entity_scene_mapper.map(msg.state.type.name)
 	if !scene:
 		return
 	var node = scene.instance()
 	var sprite = node.get_node("Sprite")
-	node.set_pos(Vector2(msg.position.x * TILE_WIDTH, msg.position.y * TILE_HEIGHT))
-	node.set_z(msg.position.z)
+	node.set_pos(Vector2(msg.state.position.x * TILE_WIDTH, msg.state.position.y * TILE_HEIGHT))
+	node.set_z(msg.state.position.z)
 	if sprite:
-		sprite.set_frame(msg.graphic.tileId)
+		sprite.set_frame(msg.state.tileGraphic.tileId)
 	node.set_entity_id(msg.entityId)
-	node.set_entity_name(msg.name)
+	node.set_entity_name(msg.state.name.name)
 	return node
 
 func move(direction):

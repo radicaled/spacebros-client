@@ -13,13 +13,13 @@ const LOGIN = "Login"
 const LOGIN_SUCCESS = "LoginSuccess"
 const SYNCHRONIZE_REQUEST = "SynchronizeRequest"
 const CREATE_ENTITY = "CreateEntity"
+const UPDATE_ENTITY = "UpdateEntity"
 const DELETE_ENTITY = "DeleteEntity"
 const SET_CAMERA    = "SetCamera"
 const MOVE_DIRECTION = "MoveDirection"
 const MOVE_TO_POSITION = "MoveToPosition"
 const TEXT_MESSAGE = "TextMessage"
 const INTERACTION = "Interaction"
-const UPDATE_GRAPHIC = "UpdateGraphic"
 const ANIMATE = "Animate"
 
 func _ready():
@@ -33,12 +33,12 @@ func _ready():
 	add_user_signal(LOGIN_SUCCESS)
 
 	add_user_signal(CREATE_ENTITY)
+	add_user_signal(UPDATE_ENTITY)
 	add_user_signal(DELETE_ENTITY)
 	add_user_signal(SET_CAMERA)
 	add_user_signal(MOVE_DIRECTION)
 	add_user_signal(MOVE_TO_POSITION)
 	add_user_signal(TEXT_MESSAGE)
-	add_user_signal(UPDATE_GRAPHIC)
 	add_user_signal(ANIMATE)
 
 

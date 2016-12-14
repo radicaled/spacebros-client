@@ -26,7 +26,7 @@ func _ready():
 
 func map(type):
 	if !ENTITY_TYPE_TO_SCENE_MAP.has(type):
-		print("UNKNOWN TYPE: " + type)
+		print("UNKNOWN TYPE: " + str(type))
 		return
 	return ENTITY_TYPE_TO_SCENE_MAP[type]
 
