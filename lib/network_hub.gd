@@ -95,7 +95,7 @@ func _on_message(msg):
 	if (indexOfPrefix != 0):
 		print("UNKNOWN MESSAGE: " + msg)
 	var short_name = message_name.right(_prefix.length())
-	print("received msg" + message_name)
+#	print("received msg" + message_name)
 	emit_signal(short_name, json)
 
 

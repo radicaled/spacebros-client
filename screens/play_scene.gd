@@ -105,12 +105,12 @@ func _on_create_entity(msg):
 
 func _on_update_entity(msg):
 	var entity_id = msg['entityId']
-	var node = entity_hub[entity_id]
+	var node = entity_hub.get_entity(entity_id)
 	node.set_entity_state(msg.state)
 
 func _on_delete_entity(msg):
 	var entity_id = msg['entityId']
-	var node = entity_hub[entity_id]
+	var node = entity_hub.get_entity(entity_id)
 	entity_hub.remove_entity(entity_id, node)
 	if node:
 		remove_child(node)
