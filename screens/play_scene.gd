@@ -142,10 +142,12 @@ func _on_text_message(msg):
 		# Slightly centered: -16px
 		# TODO: stop doing this!
 		text = text.split(':')[1]
-		# TODO: stop doing this, too
-		var new_pos = Vector2(-64, -64)
+
+		var item_rect = node.get_item_and_children_rect()
+		var speech_pos = Vector2(item_rect.pos.x, -item_rect.size.height)
+
 		# This is OK, I guess
-		speech_bubble.set_pos(new_pos)
+		speech_bubble.set_pos(speech_pos)
 		speech_bubble.display_text(text)
 
 func _on_animate(msg):
