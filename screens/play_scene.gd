@@ -134,9 +134,8 @@ func _on_text_message(msg):
 		var speech_bubble_scene = preload("res://fx/speech_bubble.tscn")
 		var speech_bubble = speech_bubble_scene.instance()
 		var node = entity_hub.get_entity(msg.entityId)
-		var existing_speech_bubble = node.get_node("Speech Bubble")
-		if existing_speech_bubble:
-			node.remove_child(existing_speech_bubble)
+		if node.has_node("Speech Bubble"):
+			node.remove_child(node.get_node("Speech Bubble"))
 		node.add_child(speech_bubble)
 		# Probable dimensions: 32px by 32px.
 		# Above head: -32px
