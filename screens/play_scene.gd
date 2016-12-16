@@ -13,10 +13,14 @@ var camera_target
 
 var entities_near_mouse = []
 
+var player_entity_id
+var player_entity
+
 onready var context_menu = get_node("Camera2D/Context Menu")
 
 onready var action_bar = get_node("Camera2D/Action Bar")
 onready var chat_window = get_node("Camera2D/Chat Window")
+onready var inventory = get_node("Camera2D/Inventory")
 
 func _ready():
 	var global = get_node("/root/global")
@@ -29,6 +33,7 @@ func _ready():
 	network_hub.connect(network_hub.UPDATE_ENTITY, self, '_on_update_entity')
 	network_hub.connect(network_hub.DELETE_ENTITY, self, '_on_delete_entity')
 	network_hub.connect(network_hub.SET_CAMERA, self, '_on_set_camera')
+	network_hub.connect(network_hub.SET_PLAYER_ENTITY, self, '_on_set_player_entity')
 	network_hub.connect(network_hub.MOVE_TO_POSITION, self, '_on_move_to_position')
 	network_hub.connect(network_hub.TEXT_MESSAGE, self, '_on_text_message')
 	network_hub.connect(network_hub.ANIMATE, self, '_on_animate')
@@ -110,6 +115,16 @@ func _on_update_entity(msg):
 	var entity_id = msg['entityId']
 	var node = entity_hub.get_entity(entity_id)
 	node.set_entity_state(msg.state)
+	# TODO: need better alignment of "player entity" concept.
+	# TODO: research player modelling in an ECS later
+	# HACK: if we got an inventory state for a node that is us, then show that as our inventory.
+	if entity_id == player_entity_id:
+		var inventory_state = msg.state['inventory']
+		if inventory_state != null:
+			# What entities do we know about that exist in our inventory?
+			for inventory_item_entity_id in inventory_state.contents:
+				inventory.add_to_inventory(entity_hub.get_entity(inventory_item_entity_id))
+				print("We have this:" + str(inventory_item_entity_id))
 
 func _on_delete_entity(msg):
 	var entity_id = msg['entityId']
@@ -122,6 +137,12 @@ func _on_set_camera(msg):
 	var camera = get_node("Camera2D")
 	var desired_position = Vector2(msg.position.x * TILE_WIDTH, msg.position.y * TILE_HEIGHT)
 	camera_target = desired_position
+
+func _on_set_player_entity(msg):
+	var entity_id = msg.entityId
+	player_entity_id = entity_id
+	player_entity = entity_hub.get_entity(entity_id)
+	print("WE ARE: " + str(entity_id))
 
 func _on_move_to_position(msg):
 	var entity_node = entity_hub.get_entity(msg.entityId)

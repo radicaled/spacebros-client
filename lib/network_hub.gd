@@ -16,6 +16,7 @@ const CREATE_ENTITY = "CreateEntity"
 const UPDATE_ENTITY = "UpdateEntity"
 const DELETE_ENTITY = "DeleteEntity"
 const SET_CAMERA    = "SetCamera"
+const SET_PLAYER_ENTITY = "SetPlayerEntity"
 const MOVE_DIRECTION = "MoveDirection"
 const MOVE_TO_POSITION = "MoveToPosition"
 const TEXT_MESSAGE = "TextMessage"
@@ -36,6 +37,7 @@ func _ready():
 	add_user_signal(UPDATE_ENTITY)
 	add_user_signal(DELETE_ENTITY)
 	add_user_signal(SET_CAMERA)
+	add_user_signal(SET_PLAYER_ENTITY)
 	add_user_signal(MOVE_DIRECTION)
 	add_user_signal(MOVE_TO_POSITION)
 	add_user_signal(TEXT_MESSAGE)
