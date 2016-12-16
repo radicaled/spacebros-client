@@ -12,6 +12,7 @@ script/script = ExtResource( 1 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 
+editor/display_folded = true
 z/z = 99
 anchor_mode = 1
 rotating = false
@@ -71,6 +72,8 @@ margin/left = 293.0
 margin/top = 266.0
 margin/right = 293.0
 margin/bottom = 266.0
+
+[node name="Entity Layer" type="Node" parent="."]
 
 [connection signal="text_submitted" from="Camera2D/Chat Window" to="." method="_on_Chat_Window_text_submitted"]
 

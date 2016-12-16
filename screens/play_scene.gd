@@ -37,6 +37,7 @@ func _ready():
 
 	set_process(true)
 	set_process_input(true)
+	set_process_unhandled_input(true)
 
 func _process(delta):
 	var camera = get_node("Camera2D")
@@ -59,6 +60,8 @@ func _input(event):
 				move('WEST')
 			if event.is_action_pressed("text_submit"):
 				chat_window.call_deferred('focus_chat_input')
+
+func _unhandled_input(event):
 	if event.type == InputEvent.MOUSE_BUTTON:
 		# TODO: FIX: accidentally selecting items underneath the cursor instead of the context menu
 		if event.is_action_pressed("game_select"):
