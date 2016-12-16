@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=1]
+[gd_scene load_steps=6 format=1]
 
 [ext_resource path="res://screens/play_scene.gd" type="Script" id=1]
 [ext_resource path="res://hud/debug/game_stats.tscn" type="PackedScene" id=2]
 [ext_resource path="res://hud/action_bar.tscn" type="PackedScene" id=3]
 [ext_resource path="res://hud/chat_window.tscn" type="PackedScene" id=4]
+[ext_resource path="res://hud/inventory.tscn" type="PackedScene" id=5]
 
 [node name="PlayScreen" type="Node2D"]
 
@@ -63,6 +64,13 @@ margin/right = 20.0
 margin/bottom = 20.0
 popup/exclusive = true
 items = [  ]
+
+[node name="Inventory" parent="Camera2D" instance=ExtResource( 5 )]
+
+margin/left = 293.0
+margin/top = 266.0
+margin/right = 293.0
+margin/bottom = 266.0
 
 [connection signal="text_submitted" from="Camera2D/Chat Window" to="." method="_on_Chat_Window_text_submitted"]
 
