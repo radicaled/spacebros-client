@@ -8,8 +8,10 @@ const STRUCTURES = preload("res://entities/structure.tscn")
 const WALLS = preload("res://entities/walls.tscn")
 const SECURITY_DOORS = preload("res://entities/security_doors.tscn")
 const COMMAND_DOORS = preload("res://entities/command_doors.tscn")
+const BUTCHER_KNIFE = preload("res://entities/butcher_knife.tscn")
 
 const ENTITY_TYPE_TO_SCENE_MAP = {
+	"butcher_knife": BUTCHER_KNIFE,
 	"Doorcomglass": COMMAND_DOORS,
 	"Doorsecglass": SECURITY_DOORS,
 	"human": HUMAN,
