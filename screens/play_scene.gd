@@ -193,6 +193,9 @@ func _on_entity_unhover(node):
 # Helper Functions
 
 func create_entity_node(msg):
+	if msg['state'] != null && !msg.state.has('type'):
+		print("Null object: " + str(msg))
+		return
 	var scene = entity_scene_mapper.map(msg.state.type.name)
 	if !scene:
 		return
